@@ -6,8 +6,9 @@
   "author": "Davidxlucaxs",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node-dev ./src/index.ts",
-    "test": "jest"
+    "start": "node build/index.js",
+    "test": "jest",
+    "dev": "ts-node-dev ./src/index.ts"
   },
   "dependencies": {
     "@types/jest": "^29.5.12",
