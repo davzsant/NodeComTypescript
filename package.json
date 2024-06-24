@@ -8,7 +8,12 @@
   "scripts": {
     "start": "node build/index.js",
     "test": "jest",
-    "dev": "ts-node-dev ./src/index.ts"
+    "dev": "ts-node-dev ./src/index.ts",
+    "build": "tsc",
+    "knex:migrate" : "yarn knex --knexfile ./src/server/database/knex/Enviroment.ts migrate:latest",
+    "knex:rollback" : "yarn knex --knexfile ./src/server/database/knex/Enviroment.ts migrate:rollback",
+    "knex:rollback-all" : "yarn knex --knexfile ./src/server/database/knex/Enviroment.ts migrate:rollback --all",
+    "knex:seed" : "yarn knex --knexfile ./src/server/database/knex/Enviroment.ts seed:run"
   },
   "dependencies": {
     "@types/jest": "^29.5.12",
@@ -16,6 +21,8 @@
     "express": "^4.19.2",
     "http-status-codes": "^2.3.0",
     "jest": "^29.7.0",
+    "knex": "^3.1.0",
+    "sqlite3": "^5.1.7",
     "ts-jest": "^29.1.5",
     "yup": "^1.4.0"
   },
