@@ -2,24 +2,27 @@ import { Request, Response } from "express";
 import * as yup from 'yup';
 import { validation } from "../../shared/middleware";
 import { StatusCodes } from "http-status-codes";
+import { getById } from "../../database/providers/cidades/GetById";
 
 /*Para definir os tipos de dados que serao aceitos */
 interface iParamProp{
-  id?:number
+  id:number
 }
 
 /*Ira validar os campos */
 export const getByIdValidation = validation((getSchema)=>({
   params: getSchema<iParamProp>(yup.object().shape({
-    id: yup.number().optional().moreThan(0),
+    id: yup.number().moreThan(0).required(),
   })),
 }));
 
 /*Criar de fato */
 export const getByID = async (req: Request<iParamProp>,res: Response) => {
-  if(Number(req.params.id) === 99999) return res.status(StatusCodes.NOT_FOUND).json({errors:{default:"registro nao encontrado"}});
-  return res.status(StatusCodes.OK).json({
-    id:2,
-    nome:"Pernambuco"
-  });
+  const result = await getById(req.params.id);
+  if(result instanceof Error){
+    res.send(StatusCodes.NOT_FOUND).json({
+      error:{
+        default:result.message
+      }});}
+  res.status(StatusCodes.OK).json(result);
 };

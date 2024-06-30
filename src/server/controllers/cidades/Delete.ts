@@ -2,26 +2,30 @@ import { Request, Response } from "express";
 import * as yup from 'yup';
 import { validation } from "../../shared/middleware";
 import { StatusCodes } from "http-status-codes";
+import { deleteById } from "../../database/providers/cidades/Delete";
 
 /*Para definir os tipos de dados que serao aceitos */
 interface iParamProp{
-  id?:number
+  id:number
 }
 
 /*Ira validar os campos */
 export const deleteValidation = validation((getSchema)=>({
   params: getSchema<iParamProp>(yup.object().shape({
-    id: yup.number().optional().moreThan(0),
+    id: yup.number().required().moreThan(0),
   })),
 }));
 
 /*Criar de fato */
 export const deleteRegister = async (req: Request<iParamProp>,res: Response) => {
   
-  if(Number(req.params.id) === 99999) return res.status(StatusCodes.NOT_FOUND).json({
-    errors: {
-      default: "Registro nao encontrado"
-    }
-  });
-  return res.status(StatusCodes.NO_CONTENT).json(req.params.id);
+  const result = await deleteById(req.params.id);
+  if(result instanceof Error){
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error:{
+        default:result.message
+      }
+    });
+  }
+  res.status(StatusCodes.OK).json({text:"Deletado com sucesso"});
 };

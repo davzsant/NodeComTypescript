@@ -4,10 +4,11 @@ import * as yup from 'yup';
 import { validation } from "../../shared/middleware";
 import { StatusCodes } from "http-status-codes";
 import { iCidade } from "../../database/models";
+import { updateById } from "../../database/providers/cidades/Update";
 
 /*Para definir os tipos de dados que serao aceitos */
 interface iParamProp{
-  id?:number
+  id:number
 }
 
 interface iBodyProps extends Omit<iCidade,'id'>{}
@@ -24,10 +25,14 @@ export const updateValidation = validation((getSchema)=>({
 
 /*Criar de fato */
 export const update = async (req: Request<iParamProp,{},iBodyProps>,res: Response) => {
-  if(Number(req.params.id) === 99999) return res.status(StatusCodes.NOT_FOUND).json({
-    errors: {
-      default: "Registro nao encontrado"
-    }
-  });
-  return res.status(StatusCodes.NO_CONTENT).send();
+  const result = await updateById(req.params.id,req.body);
+  if(result instanceof Error){
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error:{
+        message:result.message
+      }
+    });
+  }
+  res.status(StatusCodes.OK).json({text:"Atualizado com sucesso"});
+
 };
