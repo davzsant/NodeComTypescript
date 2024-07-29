@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import * as yup from 'yup';
 import { validation } from "../../shared/middleware";
 import { StatusCodes } from "http-status-codes";
-import { getAllRegisters } from "../../database/providers/cidades/GetAll";
+import { pessoaProvider } from "../../database/providers/pessoa";
 import { count } from "../../database/providers/cidades/Count";
 
 /*Para definir os tipos de dados que serao aceitos */
@@ -32,11 +32,10 @@ export const getAllValidation = validation((getSchema)=>({
 
 /*Criar de fato */
 export const getAll = async (req: Request<iParamsProps,{},{},iQueryProps>,res: Response) => {
-  const result = await getAllRegisters(
+  const result = await pessoaProvider.getAllRegisters(
     req.query.page || 1,
     req.query.limit || 10,
     req.query.filter || '',
-    Number(req.params.id)
   );
   const countRegister = await count(req.query.filter);
 

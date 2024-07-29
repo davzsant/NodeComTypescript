@@ -5,7 +5,7 @@ import { iCidade } from "../../models";
 export const create = async (cidade: Omit<iCidade,'id'>):Promise<number | Error> => {
   try{
     const [result] = await Knex(ETableNames.cidade).insert(cidade).returning('id');
-
+    console.log("O id criado foi:"+result);
     if(typeof result === "object"){
       return result.id;
     }else if(typeof result === "number"){

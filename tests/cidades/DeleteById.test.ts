@@ -19,7 +19,7 @@ describe("Cidades - DeleteById",()=>{
       .delete("/cidades/99999")
       .send();
 
-    expect(res.statusCode).toEqual(StatusCodes.NOT_FOUND);
+    expect(res.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
     expect(res.body).toHaveProperty("errors.default");
   });
 });

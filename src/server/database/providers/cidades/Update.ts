@@ -7,7 +7,6 @@ export const updateById = async(id:number,cidade:Omit<iCidade,'id'>):Promise<voi
     const result = await Knex(ETableNames.cidade)
       .update(cidade)
       .where('id','=',id);
-
     if(result > 0) return;
     return new Error("Registro nao atualizado");
     

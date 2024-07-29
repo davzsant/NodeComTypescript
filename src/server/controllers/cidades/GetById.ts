@@ -6,22 +6,30 @@ import { getById } from "../../database/providers/cidades/GetById";
 
 /*Para definir os tipos de dados que serao aceitos */
 interface iParamProp{
-  id:number
+  id?:number
 }
 
 /*Ira validar os campos */
 export const getByIdValidation = validation((getSchema)=>({
   params: getSchema<iParamProp>(yup.object().shape({
-    id: yup.number().moreThan(0).required(),
+    id: yup.number().moreThan(0).optional(),
   })),
 }));
 
 /*Criar de fato */
 export const getByID = async (req: Request<iParamProp>,res: Response) => {
+
+  if(!req.params.id){
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      errors:{
+        default: "O parametro id precisa ser informado"
+      }
+    });
+  }
   const result = await getById(req.params.id);
   if(result instanceof Error){
-    res.send(StatusCodes.NOT_FOUND).json({
-      error:{
+    return res.status(StatusCodes.NOT_FOUND).json({
+      errors:{
         default:result.message
       }});}
   res.status(StatusCodes.OK).json(result);

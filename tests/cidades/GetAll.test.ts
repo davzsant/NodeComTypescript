@@ -7,7 +7,7 @@ describe("Cidades - GetAll",()=>{
     expect(res1.statusCode).toEqual(StatusCodes.CREATED);
 
     const resBuscado = await testServer
-      .get("/cidades")
+      .get("/cidades/1?filter=pi&limit=12&page=1")
       .send();
 
     expect(Number(resBuscado.header['x-total-count'])).toBeGreaterThan(0);

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import * as yup from 'yup';
 import { validation } from "../../shared/middleware";
 import { StatusCodes } from "http-status-codes";
-import { deleteById } from "../../database/providers/cidades/Delete";
+import { pessoaProvider } from "../../database/providers/pessoa";
 
 /*Para definir os tipos de dados que serao aceitos */
 interface iParamProp{
@@ -25,7 +25,7 @@ export const deleteRegister = async (req: Request<iParamProp>,res: Response) => 
       }
     });
   }
-  const result = await deleteById(req.params.id);
+  const result = await pessoaProvider.deleteById(req.params.id);
   if(result instanceof Error){
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       errors:{
